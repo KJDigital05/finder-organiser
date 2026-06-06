@@ -1,4 +1,4 @@
-# finder-organiser
+## finder-organiser
 A Python utility for automatically organising files on macOS.
 
 ## Features
@@ -27,4 +27,3 @@ Early Development
 - Automatically monitor folders for new files to sort
 - Allow user-chosen sorting rules via a configuration file
 - Create an undo feature for any moved files
-- Generate a log of all file operations
