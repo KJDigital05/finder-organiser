@@ -7,6 +7,19 @@ downloads = Path.home() / "Downloads"
 # Loop through each item within Downloads
 print(f"Scanning: {downloads}\n")
 
+# Define mapping to remove looping
+EXT_MAP = {
+    ".jpg": "Images", ".png": "Images", ".heic": "Images", ".gif": "Images", ".bmp": "Images", ".icns": "Images",
+    ".mov": "Video", ".mp4": "Video", ".mkv": "Video", ".avi": "Video",
+    ".docx": "Documents", ".pdf": "Documents", ".txt": "Documents", ".pages": "Documents", ".doc": "Documents",
+    ".xlsx": "MS Excel", ".xls": "MS Excel", ".xlt": "MS Excel", ".pptx": "MS Powerpoint", ".ppt": "MS Powerpoint", ".mpp": "MS Project",
+    ".cs": "Development", ".jar": "Development", ".exe": "Development",
+    ".accdb": "Database", ".laccdb": "Database",
+    ".html": "Web/Internet", ".webp": "Web/Internet", ".avif": "Web/Internet",
+    ".dmg": "Installers", ".pkg": "Installers", ".iso": "Installers",
+    ".DS_Store": "System", ".db": "System"
+}
+
 # Initialize the category counter
 category_counts = collections.Counter()
 other_files = [] # List to track "Other" files
@@ -14,52 +27,21 @@ other_files = [] # List to track "Other" files
 # Ignore directories and only display files
 for item in downloads.iterdir():
     if item.is_file():
-        ext = item.suffix.lower()
+        extension = item.suffix.lower()
 
-# Created variables for easy repitition        
-        extension = item.suffix
-        category = "Other"
-
-# Organise extension suffixes for categories
-        image_extensions = {".jpg", ".png", ".gif", ".bmp", ".icns", ".HEIC"}
-        video_extensions = {".mov", ".mp4", ".mkv", ".avi"}
-        document_extensions = {".docx", ".pdf", ".txt", ".pages", '.doc'}
-        ms_extensions = {".xlsx", ".xls", ".pptx", ".xlt", ".ppt", ".mpp"}
-        database_extensions = {".accdb", ".laccdb"} 
-        dev_extensions = {".cs", ".jar", ".Program.cs", ".exe"}
-        web_extensions = {".html", ".webp", ".avif"}
-        installers_extensions = {".dmg", ".pkg", ".iso"}
-        sys_extensions= {".DS_Store", ".db", ".localized", ".desktop.ini"}
-        
-        if extension in image_extensions:
-            category = "Images"
-        elif extension in video_extensions:
-            category = "Video"
-        elif extension in document_extensions:
-            category = "Documents"
-        elif extension in ms_extensions:
-            category = "MS Office/Planning"
-        elif extension in database_extensions:
-            category = "Database"
-        elif extension in dev_extensions:
-            category = "Development/Code"
-        elif extension in web_extensions:
-            category = "Web/Internet"
-        elif extension in installers_extensions:
-            category = "Installers/Disk Images"
-        elif extension in sys_extensions:
-            category = "System"
+        category = EXT_MAP.get(extension, "Other")
 
         category_counts[category] += 1
         if category == "Other":
             other_files.append(item.name)
-
+        
         print(f"{item.name} -> {category}")
 
+# Print summary of all file extensions and a count of how many files there are
 print("\n--- Summary ---")
 for category, count in category_counts.items():
     print(f"{category}: {count} files")
 
-print("\n--- Files needing better organization (Other) ---")
+print("\n--- Files needing better organisation (Other) ---")
 for name in other_files:
     print(f"- {name}")
