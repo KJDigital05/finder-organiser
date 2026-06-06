@@ -12,9 +12,9 @@ EXT_MAP = {
     ".jpg": "Images", ".png": "Images", ".heic": "Images", ".gif": "Images", ".bmp": "Images", ".icns": "Images",
     ".mov": "Video", ".mp4": "Video", ".mkv": "Video", ".avi": "Video",
     ".docx": "Documents", ".pdf": "Documents", ".txt": "Documents", ".pages": "Documents", ".doc": "Documents",
-    ".xlsx": "MS Excel", ".xls": "MS Excel", ".xlt": "MS Excel", ".pptx": "MS Powerpoint", ".ppt": "MS Powerpoint", ".mpp": "MS Project",
-    ".cs": "Development", ".jar": "Development", ".exe": "Development",
-    ".accdb": "Database", ".laccdb": "Database",
+    ".xlsx": "MS Office/Excel", ".xls": "MS Office/Excel", ".xlt": "MS Office/Excel", ".pptx": "MS Office/Powerpoint", ".ppt": "MS Office/Powerpoint", ".mpp": "MS Office/Project",
+    ".accdb": "MS Office/Database", ".laccdb": "MS Office/Database",
+     ".cs": "Development", ".jar": "Development", ".exe": "Development",
     ".html": "Web/Internet", ".webp": "Web/Internet", ".avif": "Web/Internet",
     ".dmg": "Installers", ".pkg": "Installers", ".iso": "Installers", 
     ".db": "System"
@@ -22,14 +22,14 @@ EXT_MAP = {
 
 # Initialise the category counter
 category_counts = Counter()
-other_files = [] # List to track any "Other" files
+other_files = [] # List to track any uncategorised files
 
 # Ignore directories and only display files
 for item in downloads.iterdir():
     if item.is_file():
         extension = item.suffix.lower()
-        destination = downloads / category
         category = EXT_MAP.get(extension, "Other")
+        destination = downloads / category
 
         category_counts[category] += 1
         if category == "Other":
@@ -40,6 +40,12 @@ for item in downloads.iterdir():
         print(f"FROM: {downloads}")
         print(f"TO:   {destination}\n")
 
+# Check wether destination file exists on users system
+        if destination.is_dir():
+            print(f"{destination} already exists.\n")
+        else:
+            print(f"{destination} needs to be created.\n")
+
 # Print summary of all file extensions and a count of how many files there are of each
 print("\n--- Summary ---")
 for category, count in category_counts.items():
@@ -49,3 +55,5 @@ for category, count in category_counts.items():
 print("\n--- Files needing better organisation (Other) ---")
 for name in other_files:
     print(f"- {name}")
+
+
