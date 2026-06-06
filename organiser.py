@@ -44,7 +44,11 @@ for item in downloads.iterdir():
         if destination.is_dir():
             print(f"{destination} already exists.\n")
         else:
-            print(f"{destination} needs to be created.\n")
+            print(f"{destination} folder not found.\n")
+
+# Create any missing directories for destinations automatically
+            destination.mkdir(parents=True, exist_ok=True)
+            print(f"Created: {destination}\n")
 
 # Print summary of all file extensions and a count of how many files there are of each
 print("\n--- Summary ---")
