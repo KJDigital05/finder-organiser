@@ -2,14 +2,14 @@ from pathlib import Path
 from collections import Counter
 
 # Use current users' Downloads folder automatically
-downloads = Path.home() / "Downloads"
+downloads = Path.home() / "Documents"
 
 # Loop through each item within Downloads
 print(f"Scanning: {downloads}\n")
 
 # Define mapping to assign file to corresponding categories based on suffix
 EXT_MAP = {
-    ".jpg": "Images", ".png": "Images", ".heic": "Images", ".gif": "Images", ".bmp": "Images", ".icns": "Images",
+    ".jpg": "Images", ".png": "Screenshots", ".heic": "Images", ".gif": "Images", ".bmp": "Images", ".icns": "Images",
     ".mov": "Video", ".mp4": "Video", ".mkv": "Video", ".avi": "Video",
     ".docx": "Documents", ".pdf": "Documents", ".txt": "Documents", ".pages": "Documents", ".doc": "Documents",
     ".xlsx": "MS Office/Excel", ".xls": "MS Office/Excel", ".xlt": "MS Office/Excel", ".pptx": "MS Office/Powerpoint", ".ppt": "MS Office/Powerpoint", ".mpp": "MS Office/Project",
@@ -49,6 +49,14 @@ for item in downloads.iterdir():
 # Create any missing directories for destinations automatically
             destination.mkdir(parents=True, exist_ok=True)
             print(f"Created: {destination}\n")
+        
+        new_location = destination / item.name
+        print(f"Moving:")
+        print(f"FROM: {item}")
+        print(f"TO: {new_location}\n")
+
+# Move files to corresponding folders
+        item.rename(new_location)
 
 # Print summary of all file extensions and a count of how many files there are of each
 print("\n--- Summary ---")
