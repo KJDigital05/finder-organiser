@@ -16,10 +16,10 @@ My Finder folders, Desktop and Downloads directories had become difficult to man
 Early Development
 
 ## Plan
-- [] Scan a folder
-- [] Detect file types
-- [] Move files into chosen category folders
-- [] Add dry-run mode
+- [✅] Scan a folder
+- [✅] Detect file types
+- [✅] Move files into chosen category folders
+- [✅] Add dry-run mode
 - [] Add duplicate detection (using SHA-256) for easy deletion
 - [] Add GUI
 
