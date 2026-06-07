@@ -1,17 +1,32 @@
 from pathlib import Path
 from collections import Counter
 
-# Use current users' Downloads folder automatically
-downloads = Path.home() / "Documents"
+# Get the Home directory path
+home_dir = Path.home()
 
-# Loop through each item within Downloads
-print(f"Scanning: {downloads}\n")
+# Automatically list visible folders in the Home directory
+print("Available folders to sort:")
+folders = [item.name for item in home_dir.iterdir() if item.is_dir() and not item.name.startswith(".")]
+
+for folder in folders:
+    print(f" - {folder}")
+
+# Allow user to select folder to sort
+choice = input("\nWhich folder would you like to sort? ").strip()
+target_dir = home_dir / choice
+
+#Check if the folder exists before proceeding
+if not target_dir.exists() or not target_dir.is_dir():
+    print(f"Error: '{choice}' is not a valid folder.")
+    exit()
+
+    print(f"\nScanning: {target_dir}\n")
 
 # Define mapping to assign file to corresponding categories based on suffix
 EXT_MAP = {
-    ".jpg": "Images", ".png": "Screenshots", ".heic": "Images", ".gif": "Images", ".bmp": "Images", ".icns": "Images",
+    ".jpg": "Images", ".jpeg": "Images", ".png": "Screenshots", ".heic": "Images", ".gif": "Images", ".bmp": "Images", ".icns": "Images",
     ".mov": "Video", ".mp4": "Video", ".mkv": "Video", ".avi": "Video",
-    ".docx": "Documents", ".pdf": "Documents", ".txt": "Documents", ".pages": "Documents", ".doc": "Documents",
+    ".docx": "Documents", ".pdf": "Documents", ".txt": "Documents", ".ppages": "Documents", ".doc": "Documents",
     ".xlsx": "MS Office/Excel", ".xls": "MS Office/Excel", ".xlt": "MS Office/Excel", ".pptx": "MS Office/Powerpoint", ".ppt": "MS Office/Powerpoint", ".mpp": "MS Office/Project",
     ".accdb": "MS Office/Database", ".laccdb": "MS Office/Database",
      ".cs": "Development", ".jar": "Development", ".exe": "Development",
@@ -25,11 +40,11 @@ category_counts = Counter()
 other_files = [] # List to track any uncategorised files
 
 # Ignore directories and only display files
-for item in downloads.iterdir():
+for item in target_dir.iterdir():
     if item.is_file():
         extension = item.suffix.lower()
         category = EXT_MAP.get(extension, "Other")
-        destination = downloads / category
+        destination = target_dir / category
 
         category_counts[category] += 1
         if category == "Other":
@@ -37,7 +52,7 @@ for item in downloads.iterdir():
 
 # Dry run mode showing where each file would be moved to 
         print(f"Would move:\n{item.name}")
-        print(f"FROM: {downloads}")
+        print(f"FROM: {target_dir}")
         print(f"TO:   {destination}\n")
 
 # Check wether destination file exists on users system
@@ -57,6 +72,14 @@ for item in downloads.iterdir():
 
 # Move files to corresponding folders
         item.rename(new_location)
+
+# Delete any empty folders inside chosen directory
+print("--- Cleaning up empty folders ---")
+
+for folder in target_dir.iterdir():
+    if folder.is_dir() and not any(folder.iterdir()):
+        print(f"Deleting empty folder: {folder.name}")
+        folder.rmdir()
 
 # Print summary of all file extensions and a count of how many files there are of each
 print("\n--- Summary ---")
