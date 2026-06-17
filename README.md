@@ -1,4 +1,5 @@
 ## finder-organiser
+This project is currently in active development (WIP). Core functionality is implemented, with additional features planned.
 A Python utility for automatically organising files on macOS.
 
 ## Features
